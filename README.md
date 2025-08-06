@@ -2,4 +2,8 @@
 
 
 ## 0805
-新增githubdesktop 截圖
+安裝 git github desktop
+註冊github帳號, 新增課堂專案 113TKUDS_2
+vs code, vscode 插件
+java安裝, 版本截圖
+新增 githubdesktop 截圖
