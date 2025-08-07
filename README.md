@@ -7,3 +7,5 @@
 vs code, vscode 插件
 java安裝, 版本截圖
 新增 githubdesktop 截圖
+## 0806
+單元1~3練習題
