@@ -1,53 +1,24 @@
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 public class BasicMinHeapPractice {
-    private final List<Integer> heap;
+
+    private ArrayList<Integer> heap;
 
     public BasicMinHeapPractice() {
         heap = new ArrayList<>();
     }
 
-    private int parent(int i) { return (i - 1) / 2; }
-    private int leftChild(int i) { return 2 * i + 1; }
-    private int rightChild(int i) { return 2 * i + 2; }
-
-    private void heapifyUp(int i) {
-        while (i > 0 && heap.get(i) < heap.get(parent(i))) {
-            Collections.swap(heap, i, parent(i));
-            i = parent(i);
-        }
-    }
-
-    private void heapifyDown(int i) {
-        int minIdx = i;
-        while (true) {
-            int left = leftChild(minIdx);
-            int right = rightChild(minIdx);
-            int smallest = minIdx;
-
-            if (left < heap.size() && heap.get(left) < heap.get(smallest)) {
-                smallest = left;
-            }
-            if (right < heap.size() && heap.get(right) < heap.get(smallest)) {
-                smallest = right;
-            }
-            if (smallest == minIdx) break;
-            Collections.swap(heap, minIdx, smallest);
-            minIdx = smallest;
-        }
-    }
-
-    public void insert(int value) {
-        heap.add(value);
+    // 插入元素
+    public void insert(int val) {
+        heap.add(val);
         heapifyUp(heap.size() - 1);
     }
 
+    // 取出並移除最小值
     public int extractMin() {
         if (heap.isEmpty()) {
-            throw new NoSuchElementException("Heap is empty");
+            throw new IllegalStateException("Heap is empty");
         }
         int min = heap.get(0);
         int last = heap.remove(heap.size() - 1);
@@ -58,34 +29,81 @@ public class BasicMinHeapPractice {
         return min;
     }
 
-    public int peek() {
+    // 查看最小值但不移除
+    public int getMin() {
         if (heap.isEmpty()) {
-            throw new NoSuchElementException("Heap is empty");
+            throw new IllegalStateException("Heap is empty");
         }
         return heap.get(0);
     }
 
-    public boolean isEmpty() { return heap.isEmpty(); }
+    // 返回大小
+    public int size() {
+        return heap.size();
+    }
 
-    @Override
-    public String toString() { return heap.toString(); }
+    // 檢查是否為空
+    public boolean isEmpty() {
+        return heap.isEmpty();
+    }
 
+    // 往上調整（插入後用）
+    private void heapifyUp(int index) {
+        while (index > 0) {
+            int parent = (index - 1) / 2;
+            if (heap.get(index) < heap.get(parent)) {
+                swap(index, parent);
+                index = parent;
+            } else {
+                break;
+            }
+        }
+    }
+
+    // 往下調整（刪除後用）
+    private void heapifyDown(int index) {
+        int size = heap.size();
+        while (true) {
+            int left = 2 * index + 1;
+            int right = 2 * index + 2;
+            int smallest = index;
+
+            if (left < size && heap.get(left) < heap.get(smallest)) {
+                smallest = left;
+            }
+            if (right < size && heap.get(right) < heap.get(smallest)) {
+                smallest = right;
+            }
+            if (smallest != index) {
+                swap(index, smallest);
+                index = smallest;
+            } else {
+                break;
+            }
+        }
+    }
+
+    // 交換兩個元素
+    private void swap(int i, int j) {
+        int temp = heap.get(i);
+        heap.set(i, heap.get(j));
+        heap.set(j, temp);
+    }
+
+    // 測試
     public static void main(String[] args) {
         BasicMinHeapPractice minHeap = new BasicMinHeapPractice();
-
-        System.out.println("=== Min Heap 操作示範 ===");
-        int[] values = {15, 10, 20, 8, 25, 5};
-        for (int value : values) {
-            minHeap.insert(value);
-            System.out.println("插入 " + value + " 後: " + minHeap);
+        int[] nums = {15, 10, 20, 8, 25, 5};
+        for (int n : nums) {
+            minHeap.insert(n);
         }
 
-        System.out.println("\n當前最小值: " + minHeap.peek());
-
-        System.out.println("\n依序取出最小值:");
+        System.out.println("ExtractMin 順序應為: 5, 8, 10, 15, 20, 25");
         while (!minHeap.isEmpty()) {
-            System.out.println("取出: " + minHeap.extractMin() + ", 剩餘: " + minHeap);
+            System.out.print(minHeap.extractMin());
+            if (!minHeap.isEmpty()) {
+                System.out.print(", ");
+            }
         }
     }
 }
-
